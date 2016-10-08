@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/jquery-1.10.1.min.js"></script>
+    <style>
+        .drag {
+            width: 368px;
+            padding: 0;
+            margin: 0;
+            background: #FDEB9C;
+            height: 40px;
+            position: absolute;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .dragBlock {
+            height: 40px;
+            width: 40px;
+            background-color: #E67E22;
+            position: absolute;
+            left: 0;
+            z-index: 10;
+        }
+
+        .word {
+            font-size: 18px;
+            color: black;
+            position: absolute;
+            z-index: 8;
+            height: 40px;
+            line-height: 40px;
+            left: 150px;
+            -webkit-user-select: none; /* Chrome all / Safari all */
+            -moz-user-select: none; /* Firefox all */
+            -ms-user-select: none; /* IE 10+ */
+            -o-user-select: none;
+            user-select: none;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="drag" id="drag">
+        <div class="word" id="word">滑动解锁</div>
+        <div class="dragBlock" id="dragBlock"></div>
+    </div>
+<script>
+    $(document).ready(function() {
+        var move = false;//移动标记
+        var _x,m;//鼠标离控件左上角的相对位置
+        $("#dragBlock").mousedown(function (e) {
+            move = true;
+            _x = e.pageX - parseInt($("#dragBlock").css("left"));
+        });
+        $(document).mousemove(function (e) {
+            if (move) {
+                m = e.pageX - _x;//控件左上角到屏幕左上角的相对位置
+                if (m <= 338 && m >= 0) {
+                    $("#dragBlock").css({ "left": m });
+                    $("#word").css({ opacity: 1 - m / 328 });
+                }
+                else {
+                    m = 328;
+                }
+
+            }
+        }).mouseup(function (e) {
+            move = false;
+            //var m = $("#loginDragBlock").css('left');
+            if (m !== 0 && m !== 328) {
+                $("#dragBlock").animate({ "left": 0 });
+                $("#word").html('滑动解锁').css({ opacity: 1 });
+            }
+            else {
+                $("#dragBlock").animate({ "left": '328px' });
+                $("#word").html('解锁成功').css({ opacity: 1 });
+            }
+        });
+
+    });
+</script>
+</body>
+</html>
